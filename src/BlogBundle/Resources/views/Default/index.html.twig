@@ -1,14 +1,51 @@
 {% extends 'BlogBundle::layout.html.twig' %}
 
 {% block content %}
-<div class="container">
-    <div class="row">
-        <div class="col">
-            <p>
-                {{ 'home_description'|trans }}
-            </p>
-            <img src="{{ asset('bundles/booking/hotel_' ~ ('short_name'|trans) ~'.jpg') }}" alt="Hotel">
+    
+    <!--=== Breadcrumbs ===-->
+    <div class="breadcrumbs">
+        <div class="container">
+            <h1 class="pull-left">Yet Another Blog</h1>
+            <ul class="pull-right breadcrumb">
+                <li><a href="index.html">Home</a></li>
+                <li class="active">Blog</li>
+            </ul>
         </div>
+    </div><!--/breadcrumbs-->
+    <!--=== End Breadcrumbs ===-->
+    
+    <div class="container content">    
+        
+        <ul class="timeline-v1">
+            {% set inver = false %}
+            {% for post in posts %}
+                {% if inver == true %}
+                    <li class="timeline-inverted" >
+                        {% set inver = false %}
+                    {% else%}
+                    <li>
+                        {% set inver = true %}
+                    {% endif %}
+                    
+                    <div class="timeline-badge primary"><i class="glyphicon glyphicon-record"></i></div>
+                    <div class="timeline-panel">
+                        <div class="timeline-body text-justify">
+                            <h2 class="font-light"><a href="#">{{post.title}}</a></h2>
+                            <p>{{post.content| truncate(200, false, ' ... ') }}</p>
+                            <a class="btn-u btn-u-sm" href="#">Read More</a>
+                        </div>
+                        <div class="timeline-footer">
+                            <ul class="list-unstyled list-inline blog-info">
+                                <li><i class="fa fa-clock-o"></i> {{post.date|date("m/d/Y")}}</li>
+                                <li><i class="fa fa-comments-o"></i> <a href="#">7 Comments</a></li>
+                            </ul>
+                            <a class="likes" href="#">{{post.author}}</a>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+            <li class="clearfix" style="float: none;"></li>
+        </ul>
     </div>
-</div>
+    
 {% endblock %}
