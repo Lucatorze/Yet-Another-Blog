@@ -1,0 +1,36 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/service_container.html
+parameters:
+    #parameter_name: value
+
+services:
+
+#    admin.hotel:
+#        class: BookingBundle\Admin\HotelAdmin
+#        arguments: [~, BookingBundle\Entity\Hotel, ~]
+#        tags:
+#            - { name: sonata.admin, manager_type: orm, label: Hotel, group: Hotels & Rooms }
+#            
+#    admin.room:
+#        class: BookingBundle\Admin\RoomAdmin
+#        arguments: [~, BookingBundle\Entity\Room, ~]
+#        tags:
+#            - { name: sonata.admin, manager_type: orm, label: Room, group: Hotels & Rooms }
+#            
+#    admin.room_type:
+#        class: BookingBundle\Admin\RoomTypeAdmin
+#        arguments: [~, BookingBundle\Entity\RoomType, ~]
+#        tags:
+#            - { name: sonata.admin, manager_type: orm, label: RoomType, group: Hotels & Rooms }
+#            
+#    admin.booking:
+#        class: BookingBundle\Admin\BookingAdmin
+#        arguments: [~, BookingBundle\Entity\Booking, ~]
+#        tags:
+#            - { name: sonata.admin, manager_type: orm, label: Booking, group: Bookings }
+#
+#    admin.reservation:
+#        class: BookingBundle\Admin\ReservationAdmin
+#        arguments: [~, BookingBundle\Entity\Reservation, ~]
+#        tags:
+#            - { name: sonata.admin, manager_type: orm, label: Reservation, group: "Bookings" }

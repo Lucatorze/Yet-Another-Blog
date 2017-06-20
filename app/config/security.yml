@@ -1,0 +1,65 @@
+security:
+    encoders:
+        FOS\UserBundle\Model\UserInterface: bcrypt
+    
+    acl:
+        connection: default
+        
+    role_hierarchy:
+        ROLE_USER: [ROLE_USER]
+        ROLE_EDIT: [ROLE_USER, ROLE_EDIT]
+        ROLE_ADMIN: [ROLE_EDIT, ROLE_SONATA_ADMIN]
+        ROLE_SUPER_ADMIN: [ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
+        SONATA:
+            - ROLE_SONATA_PAGE_ADMIN_PAGE_EDIT
+
+    providers:
+        fos_userbundle:
+            id: fos_user.user_provider.username
+            
+    
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+            
+        admin:
+            pattern:            /yab(.*)
+            context:            user
+            form_login:
+                provider:       fos_userbundle
+                login_path:     /yab/login
+                use_forward:    false
+                check_path:     /yab/login_check
+                failure_path:   null
+            logout:
+                path:           /yab/logout
+                target:         /yab/login
+            anonymous:          true
+            switch_user:        true
+
+        main:
+            pattern:             .*
+            context:             user
+            form_login:
+                provider:       fos_userbundle
+                login_path:     /login
+                use_forward:    false
+                check_path:     /login_check
+                failure_path:   null
+            logout:             true
+            anonymous:          true
+
+    access_control:
+        # Admin login page needs to be accessed without credential
+        - { path: ^/yab/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/yab/logout$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/yab/login_check$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/yab/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
+
+        # Secured part of the site
+        # This config requires being logged for the whole site and having the admin role for the admin part.
+        # Change these rules to adapt them to your needs
+        - { path: ^/yab/, role: [ROLE_ADMIN, ROLE_SONATA_ADMIN] }
+        - { path: ^/.*, role: IS_AUTHENTICATED_ANONYMOUSLY }

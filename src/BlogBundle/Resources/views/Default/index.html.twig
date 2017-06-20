@@ -1,0 +1,14 @@
+{% extends 'BlogBundle::layout.html.twig' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <p>
+                {{ 'home_description'|trans }}
+            </p>
+            <img src="{{ asset('bundles/booking/hotel_' ~ ('short_name'|trans) ~'.jpg') }}" alt="Hotel">
+        </div>
+    </div>
+</div>
+{% endblock %}
