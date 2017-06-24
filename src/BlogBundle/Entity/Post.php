@@ -22,7 +22,7 @@ class Post
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
+     * @ORM\OneToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=false)
      */
     private $author;
@@ -53,6 +53,17 @@ class Post
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
+    
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="post")
+     */
+    private $comment;
+    
+    public function __construct()
+    {
+        $this->date = new \DateTime('Europe/Paris');
+    }
 
     public function __toString()
     {
@@ -192,5 +203,39 @@ class Post
     public function getCategory()
     {
         return $this->category;
+    }
+
+    /**
+     * Add comment
+     *
+     * @param \BlogBundle\Entity\Comment $comment
+     *
+     * @return Post
+     */
+    public function addComment(\BlogBundle\Entity\Comment $comment)
+    {
+        $this->comment[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \BlogBundle\Entity\Comment $comment
+     */
+    public function removeComment(\BlogBundle\Entity\Comment $comment)
+    {
+        $this->comment->removeElement($comment);
+    }
+
+    /**
+     * Get comment
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComment()
+    {
+        return $this->comment;
     }
 }

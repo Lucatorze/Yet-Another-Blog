@@ -1,0 +1,74 @@
+{% extends 'BlogBundle::layout.html.twig' %}
+
+{% block content %}
+    
+    <!--=== Breadcrumbs ===-->
+    <div class="breadcrumbs">
+        <div class="container">
+            <h1 class="pull-left">Yet Another Blog</h1>
+            <ul class="pull-right breadcrumb">
+                <li><a href="{{path('home')}}">Home</a></li>
+                <li><a href="{{path('home')}}">Blog</a></li>
+                <li class="active">Show Article</li>
+            </ul>
+        </div>
+    </div><!--/breadcrumbs-->
+    <!--=== End Breadcrumbs ===-->
+    
+    <div class="container content-sm">
+        <!-- News v3 -->
+        <div class="news-v3 bg-color-white margin-bottom-30">
+            <div class="news-v3-in">
+                <h2>{{post.title}}</h2>
+                
+                <p>{{post.content}}</p>
+                <ul class="list-inline posted-info">
+                    <li>By <a href="#">{{post.author}}</a></li>
+                    <li>In <a href="#">{{post.category}}</a></li>
+                    <li>Posted {{post.date|date("m/d/Y")}}</li>
+                </ul>
+            </div>
+        </div>
+        <!-- End News v3 -->
+        
+        <hr>
+        
+        <h2 class="margin-bottom-20">Comments</h2>
+        <!-- Blog Comments -->
+        {% for comment in comments %}
+        <div class="row blog-comments margin-bottom-30">
+            <div class="col-sm-2 sm-margin-bottom-40">
+                <img src="{{ asset('bundles/blog/img/img1-sm.jpg') }}" alt="">
+            </div>
+            <div class="col-sm-10">
+                <div class="comments-itself">
+                    <h4>
+                        Jalen Davenport
+                        <span>5 hours ago / <a href="#">Reply</a></span>
+                    </h4>
+                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae, gravida pellentesque urna varius vitae. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod..</p>
+                </div>
+            </div>
+        </div
+        {% endfor %}
+        <!-- End Blog Comments -->
+        
+        <hr>
+        
+        <h2 class="margin-bottom-20">Post a Comment</h2>
+        <!-- Form -->
+        <form action="assets/php/sky-forms-pro/demo-comment-process.php" method="post" id="sky-form3" class="sky-form comment-style">
+            <fieldset>                
+                <div class="sky-space-30">
+                    <div>
+                        <textarea rows="8" name="message" id="message" placeholder="Write comment here ..." class="form-control"></textarea>
+                    </div>
+                </div>
+                
+                <p><button type="submit" class="btn-u">Submit</button></p>
+            </fieldset>
+        </form>
+        <!-- End Form -->
+    </div><!--/end container-->
+    
+{% endblock %}

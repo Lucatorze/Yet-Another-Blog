@@ -27,6 +27,11 @@ class Category
      * @ORM\Column(name="title", type="string", length=255)
      */
     private $title;
+    
+    /**
+     * @var slug
+     */
+    private $slug;
 
     /**
      * @var string
@@ -101,3 +106,4 @@ class Category
         return $this->description;
     }
 }
+

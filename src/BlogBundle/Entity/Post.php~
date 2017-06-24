@@ -22,10 +22,10 @@ class Post
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="User")
+     * @ORM\OneToOne(targetEntity="\Application\Sonata\UserBundle\Entity\User")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", nullable=false)
      */
-    private $authorId;
+    private $author;
 
     /**
      * @ORM\ManyToOne(targetEntity="Category")
@@ -53,11 +53,22 @@ class Post
      * @ORM\Column(name="date", type="datetime")
      */
     private $date;
+    
+    /**
+     *
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="post")
+     */
+    private $comment;
+    
+    public function __construct()
+    {
+        $this->date = new \DateTime('Europe/Paris');
+    }
 
     public function __toString()
     {
-        if ($this->getAuthorId())
-            return $this->getAuthorId()->getUsername();
+        if ($this->getAuthor())
+            return $this->getAuthor()->getUsername();
         else {
             return 'INVALID UserName';
         }
@@ -75,27 +86,27 @@ class Post
     }
 
     /**
-     * Set authorId
+     * Set author
      *
-     * @param integer $authorId
+     * @param integer $author
      *
      * @return Post
      */
-    public function setAuthorId($authorId)
+    public function setAuthor($author)
     {
-        $this->authorId = $authorId;
+        $this->author = $author;
 
         return $this;
     }
 
     /**
-     * Get authorId
+     * Get author
      *
      * @return int
      */
-    public function getAuthorId()
+    public function getAuthor()
     {
-        return $this->authorId;
+        return $this->author;
     }
 
     /**
@@ -169,5 +180,28 @@ class Post
     {
         return $this->date;
     }
-}
 
+    /**
+     * Set category
+     *
+     * @param \BlogBundle\Entity\Category $category
+     *
+     * @return Post
+     */
+    public function setCategory(\BlogBundle\Entity\Category $category)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return \BlogBundle\Entity\Category
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+}

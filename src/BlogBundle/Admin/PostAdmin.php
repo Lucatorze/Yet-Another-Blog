@@ -15,7 +15,6 @@ class PostAdmin extends AbstractAdmin
         $formMapper->add('category');
         $formMapper->add('title');
         $formMapper->add('content');
-        $formMapper->add('date');
     }
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)

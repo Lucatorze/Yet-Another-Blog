@@ -129,28 +129,5 @@ class Comment
     {
         return $this->comment;
     }
-
-    /**
-     * Set date
-     *
-     * @param \DateTime $date
-     *
-     * @return Comment
-     */
-    public function setDate($date)
-    {
-        $this->date = $date;
-
-        return $this;
-    }
-
-    /**
-     * Get date
-     *
-     * @return \DateTime
-     */
-    public function getDate()
-    {
-        return $this->date;
-    }
 }
+

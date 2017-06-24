@@ -1,0 +1,39 @@
+{% extends 'BlogBundle::layout.html.twig' %}
+
+{% block content %}
+    
+    <!--=== Breadcrumbs ===-->
+    <div class="breadcrumbs">
+        <div class="container">
+            <h1 class="pull-left">Liste des categories</h1>
+            <ul class="pull-right breadcrumb">
+                <li><a href="{{path('home')}}">Home</a></li>
+                <li><a href="{{path('home')}}">Blog</a></li>
+                <li class="active">Categorie</li>
+            </ul>
+        </div>
+    </div><!--/breadcrumbs-->
+    <!--=== End Breadcrumbs ===-->
+    
+    <div class="container content">    
+        
+            <div class="testimonials-v6 testimonials-wrap">
+                
+                <div class="row margin-bottom-100">
+                    {% for category in categories %}
+                    <div class="col-md-6 md-margin-bottom-50">
+                        <div class="testimonials-info rounded-bottom bg-color-light">
+                            <div class="testimonials-desc">
+                                <div class="heading heading-v1">
+                                    <h2><a href='{{ path('categoryPostList', {'title': categoryPathArray[category.id]} ) }}'>{{category.title}}</a></h2>
+                                    <p>{{category.description}}</p>
+                                </div>                        
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div><!--/end row-->
+            </div>
+    </div>
+    
+{% endblock %}

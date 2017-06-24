@@ -7,7 +7,7 @@
         <div class="container">
             <h1 class="pull-left">Yet Another Blog</h1>
             <ul class="pull-right breadcrumb">
-                <li><a href="index.html">Home</a></li>
+                <li><a href="{{path('home')}}">Home</a></li>
                 <li class="active">Blog</li>
             </ul>
         </div>
@@ -30,22 +30,35 @@
                     <div class="timeline-badge primary"><i class="glyphicon glyphicon-record"></i></div>
                     <div class="timeline-panel">
                         <div class="timeline-body text-justify">
-                            <h2 class="font-light"><a href="#">{{post.title}}</a></h2>
+                            <h2 class="font-light"><a href="{{path('showPost', {'title': postPathArray[post.id]} ) }}">{{post.title}}</a></h2>
                             <p>{{post.content| truncate(200, false, ' ... ') }}</p>
-                            <a class="btn-u btn-u-sm" href="#">Read More</a>
+                            <a class="btn-u btn-u-sm" href="{{path('showPost', {'title': postPathArray[post.id]} ) }}">Read More</a>
                         </div>
                         <div class="timeline-footer">
                             <ul class="list-unstyled list-inline blog-info">
                                 <li><i class="fa fa-clock-o"></i> {{post.date|date("m/d/Y")}}</li>
-                                <li><i class="fa fa-comments-o"></i> <a href="#">7 Comments</a></li>
+                                <li><i class="fa fa-comments-o"></i> {{ post.comment|length }} Comments</li>
+                                <li><i class="fa fa-tags"></i> {{ post.category }}</li>
                             </ul>
-                            <a class="likes" href="#">{{post.author}}</a>
+                            <a class="likes" href="#">Par {{post.author}}</a>
                         </div>
                     </div>
                 </li>
             {% endfor %}
+            
             <li class="clearfix" style="float: none;"></li>
         </ul>
+        <div class="text-center">
+            <ul class="pagination">
+                <li><a href="#">«</a></li>
+                <li class="active"><a href="#">1</a></li>
+                <li><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">»</a></li>
+            </ul>
+        </div>
     </div>
     
 {% endblock %}
