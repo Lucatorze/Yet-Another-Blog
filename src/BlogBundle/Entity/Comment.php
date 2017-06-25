@@ -22,7 +22,7 @@ class Comment
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="post")
+     * @ORM\ManyToOne(targetEntity="Post")
      * @ORM\JoinColumn(name="post_id", referencedColumnName="id", nullable=false)
      */
     private $post;

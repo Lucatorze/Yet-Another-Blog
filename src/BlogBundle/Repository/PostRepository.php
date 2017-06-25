@@ -6,6 +6,7 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 
+
 class PostRepository extends \Doctrine\ORM\EntityRepository
 {
  
@@ -15,27 +16,26 @@ class PostRepository extends \Doctrine\ORM\EntityRepository
         return $qb;
     }
     
-    public function getLastArticles($first_result, $max_results = 5){
+    public function getLastArticles($page, $max_results = 5){
         $qb = $this->getBaseQb();
         $qb
                 ->orderBy('post.date', 'DESC')
-                ->setFirstResult($first_result)
+                ->setFirstResult(($page-1) * $max_results)
                 ->setMaxResults($max_results);
-        
-        $pag = new Paginator($qb);
-        return $pag;
-        //return $qb->getQuery()->getResult();
+       
+        return new Paginator($qb);
     }
     
-    public function getLastArticlesByCategory($title){
+    public function getLastArticlesByCategory($title, $page, $max_results = 5){
         $qb = $this->getBaseQb();
         $qb
                 ->where($qb->expr()->like('category.title', ':title'))
                     ->setParameter('title', str_replace("-", " ", $title))
                 ->orderBy('post.date', 'DESC')
-                ->setMaxResults(5);
+                ->setFirstResult(($page-1) * $max_results)
+                ->setMaxResults($max_results);
         
-        return $qb->getQuery()->getResult();
+         return new Paginator($qb);
     }
     
     public function getPostByTitle($title){

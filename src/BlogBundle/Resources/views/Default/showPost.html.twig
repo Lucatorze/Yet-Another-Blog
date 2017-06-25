@@ -17,7 +17,7 @@
     
     <div class="container content-sm">
         <!-- News v3 -->
-        <div class="news-v3 bg-color-white margin-bottom-30">
+        <div class="news-v3-in bg-color-white margin-bottom-30">
             <div class="news-v3-in">
                 <h2>{{post.title}}</h2>
                 
@@ -25,7 +25,7 @@
                 <ul class="list-inline posted-info">
                     <li>By <a href="#">{{post.author}}</a></li>
                     <li>In <a href="#">{{post.category}}</a></li>
-                    <li>Posted {{post.date|date("m/d/Y")}}</li>
+                    <li>Posted {{post.date|date("d/m/Y") }}</li>
                 </ul>
             </div>
         </div>
@@ -36,39 +36,44 @@
         <h2 class="margin-bottom-20">Comments</h2>
         <!-- Blog Comments -->
         {% for comment in comments %}
-        <div class="row blog-comments margin-bottom-30">
-            <div class="col-sm-2 sm-margin-bottom-40">
-                <img src="{{ asset('bundles/blog/img/img1-sm.jpg') }}" alt="">
-            </div>
-            <div class="col-sm-10">
-                <div class="comments-itself">
-                    <h4>
-                        Jalen Davenport
-                        <span>5 hours ago / <a href="#">Reply</a></span>
-                    </h4>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae, gravida pellentesque urna varius vitae. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod..</p>
+            <div class="row blog-comments margin-bottom-30">
+                <div class="col-sm-2 sm-margin-bottom-40">
+                    <img src="{{ asset('bundles/blog/img/img1-sm.jpg') }}" alt="">
                 </div>
-            </div>
-        </div
+                <div class="col-sm-10">
+                    <div class="comments-itself">
+                        <h4>
+                            {{comment.author}}
+                            <span>{{comment.date|date("d/m/Y à H:m:s") }}</span>
+                        </h4>
+                        <p>{{comment.comment}}</p>
+                    </div>
+                </div>
+            </div
         {% endfor %}
         <!-- End Blog Comments -->
         
         <hr>
         
         <h2 class="margin-bottom-20">Post a Comment</h2>
+        {% if is_granted('IS_AUTHENTICATED_FULLY') %}
         <!-- Form -->
-        <form action="assets/php/sky-forms-pro/demo-comment-process.php" method="post" id="sky-form3" class="sky-form comment-style">
-            <fieldset>                
-                <div class="sky-space-30">
-                    <div>
-                        <textarea rows="8" name="message" id="message" placeholder="Write comment here ..." class="form-control"></textarea>
-                    </div>
+        {{ form_start(form, {'attr': { 'class': 'sky-form comment-style'} }) }}
+        <fieldset>
+            <div class="sky-space-30">
+                <div>
+                    {{ form_row(form.comment, {'attr': { 'class': 'form-control'} }) }}
                 </div>
-                
-                <p><button type="submit" class="btn-u">Submit</button></p>
-            </fieldset>
-        </form>
-        <!-- End Form -->
+            </div>
+            <p><button type="submit" class="btn-u">Submit</button></p>
+        </fieldset>
+        {{ form_end(form) }}
+        {% else %}
+            <div class="alert alert-danger fade in text-center">
+                Veuillez vous connecter pour poster un commentaire.
+            </div>
+        {% endif %}
+                <!-- End Form -->
     </div><!--/end container-->
     
 {% endblock %}

@@ -6,7 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use BlogBundle\Entity\Comment;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 
 class DefaultController extends Controller
 {
@@ -31,15 +33,15 @@ class DefaultController extends Controller
     }
     
     /**
-     * @Route("/", name="home")
+     * @Route("/{page}", name="home", requirements={"page": "\d+"})
      */
-    public function indexAction(Request $request)
+    public function indexAction(Request $request, $page=1)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $repository = $em->getRepository('BlogBundle:Post');
-        $posts = $repository->getLastArticles();
+        $posts = $repository->getLastArticles($page);
         $postPathArray = array();
-        
+
         foreach ($posts as $post){
             $postPathArray[$post->getId()] = $this->slugify($post->getTitle());
         }
@@ -47,19 +49,21 @@ class DefaultController extends Controller
         return $this->render('BlogBundle:Default:index.html.twig',
             [
                 'posts' => $posts,
-                'postPathArray' => $postPathArray
+                'postPathArray' => $postPathArray,
+                'page' => $page,
+                'nombrePage' => ceil(count($posts)/5)
             ]);
     }
     
     /**
-     * @Route("/category/{title}", name="categoryPostList")
+     * @Route("/category/{title}/{page}", name="categoryPostList", requirements={"page": "\d+"})
      */
-    public function categoryPostListAction($title)
+    public function categoryPostListAction($title, $page=1)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $repository = $em->getRepository('BlogBundle:Post');
-        $posts = $repository->getLastArticlesByCategory($title);
-         $postPathArray = array();
+        $posts = $repository->getLastArticlesByCategory($title, $page);
+        $postPathArray = array();
         
         foreach ($posts as $post){
             $postPathArray[$post->getId()] = $this->slugify($post->getTitle());
@@ -68,7 +72,10 @@ class DefaultController extends Controller
         return $this->render('BlogBundle:Default:categoryPostList.html.twig',
             [
                 'posts' => $posts,
-                'postPathArray' => $postPathArray
+                'postPathArray' => $postPathArray,
+                'catPath' => $title,
+                'page' => $page,
+                'nombrePage' => ceil(count($posts)/5)
             ]);
     }
     
@@ -95,8 +102,10 @@ class DefaultController extends Controller
     
     /**
      * @Route("/post/{title}", name="showPost")
+     * @Route("/comment/post/{title}", name="postComment")
+     * @Method({"GET", "POST"})
      */
-    public function showPostAction($title)
+    public function showPostAction($title, Request $request)
     {
         $em = $this->getDoctrine()->getEntityManager();
         $repositoryPost = $em->getRepository('BlogBundle:Post');
@@ -104,27 +113,37 @@ class DefaultController extends Controller
         $repositoryComment = $em->getRepository('BlogBundle:Comment');
         $comments = $repositoryComment->findByPost(array('post' => $post));
         
+        $comment = new Comment();
+        $form = $this->createForm('BlogBundle\Form\CommentType', $comment);
+        $form->handleRequest($request);
+                
+        if( $this->container->get( 'security.authorization_checker' )->isGranted( 'IS_AUTHENTICATED_FULLY' ) )
+        {
+            $user = $this->container->get('security.token_storage')->getToken()->getUser();
+            
+            if ($form->isSubmitted() && $form->isValid()) {
+                $time = new \Datetime('Europe/Paris');
+                $em = $this->getDoctrine()->getManager();
+
+                $comment->setPost($post);
+                $comment->setAuthor($user);
+                $comment->setDate($time);
+
+                $em->persist($comment);
+                $em->flush($comment);
+
+                return $this->redirectToRoute('showPost', array('title' => $this->slugify($post->getTitle())));
+            }
+        }
+
         return $this->render('BlogBundle:Default:showPost.html.twig',
             [
                 'post' => $post,
-                'comments' => $comments
+                'comments' => $comments,
+                'form' => $form->createView(),
             ]);
     }
-    
-    /**
-     * @Route("/comment/post", name="postComment")
-     */
-    public function postCommentAction($title)
-    {
-        $em = $this->getDoctrine()->getEntityManager();
-        $repositoryPost = $em->getRepository('BlogBundle:Comment');
         
-        return $this->render('BlogBundle:Default:showPost.html.twig',
-            [
-
-            ]);
-    }
-    
     public function slugify($text){
         // replace non letter or digits by -
         $text = preg_replace('~[^\pL\d]+~u', '-', $text);

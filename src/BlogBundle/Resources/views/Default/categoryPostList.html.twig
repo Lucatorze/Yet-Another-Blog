@@ -38,7 +38,7 @@
                             </div>
                             <div class="timeline-footer">
                                 <ul class="list-unstyled list-inline blog-info">
-                                    <li><i class="fa fa-clock-o"></i> {{post.date|date("m/d/Y")}}</li>
+                                    <li><i class="fa fa-clock-o"></i> {{post.date|date("d/m/Y")}}</li>
                                     <li><i class="fa fa-comments-o"></i> {{ post.comment|length }} Comments</li>
                                     <li><i class="fa fa-tags"></i> {{ post.category }}</li>
                                 </ul>
@@ -56,15 +56,15 @@
             </div>
         {%endif%}
         <div class="text-center">
+            
             <ul class="pagination">
-                <li><a href="#">«</a></li>
-                <li class="active"><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">»</a></li>
-            </ul>
+        {% for p in range(1, nombrePage) %}
+            <li{% if p == page %} class="active"{% endif %}>
+                <a href="{{ path('categoryPostList', {'title' : catPath, 'page': p}) }}">{{ p }}</a>
+            </li>          
+        {% endfor %}
+        </ul>
+            
         </div>
     </div>
     

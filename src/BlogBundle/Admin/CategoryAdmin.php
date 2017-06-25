@@ -23,5 +23,12 @@ class CategoryAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper->add('title');
-        $listMapper->add('description');    }
+        $listMapper->add('description');
+        $listMapper->add('_action', 'actions', array(
+            'actions' => array(
+                'edit' => array(),
+                'delete' => array(),
+            )
+        ));
+    }
 }

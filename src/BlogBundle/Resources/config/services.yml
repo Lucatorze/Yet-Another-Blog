@@ -1,4 +1,9 @@
 services:
+    twig.extension.date:
+       class: Twig_Extensions_Extension_Date
+       tags:
+            - { name: twig.extension }
+    
     locale_subscriber:
         class: BlogBundle\EventSubscriber\LocaleSubscriber
         arguments: ['%kernel.default_locale%']
@@ -17,3 +22,9 @@ services:
         tags:
             - { name: sonata.admin, manager_type: orm, label: Post, group: "Gestion du blog" }
 
+    admin.comment:
+        class: BlogBundle\Admin\CommentAdmin
+        arguments: [~, BlogBundle\Entity\Comment, ~]
+        tags:
+            - { name: sonata.admin, manager_type: orm, label: Comment, group: "Gestion du blog" }
+        
